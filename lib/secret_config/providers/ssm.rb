@@ -26,7 +26,8 @@ module SecretConfig
         @retry_count  = retry_count
         @retry_max_ms = retry_max_ms
         @logger       = SemanticLogger["Aws::SSM"] if defined?(SemanticLogger)
-        @client       = Aws::SSM::Client.new({logger: logger}.merge!(args))
+        @client       = Aws::SSM::Client.new({logger: logger, 
+          credentials: Aws::InstanceProfileCredentials.new(imds_versions: ['v2'])}.merge!(args))
       end
 
       # Yields the key with its absolute path and corresponding string value
