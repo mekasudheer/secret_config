@@ -28,6 +28,14 @@ module SecretConfig
         @logger       = SemanticLogger["Aws::SSM"] if defined?(SemanticLogger)
         
         credentials = Aws::InstanceProfileCredentials.new(imds_versions: ['v2'])
+
+        if credentials.set?
+          puts "✅ IAM credentials are available and active."
+          puts "Access Key: #{creds.credentials.access_key_id}"
+        else
+          raise "❌ IAM credentials are not available bro."
+        end
+        
         @client = Aws::SSM::Client.new({
             logger: logger,
             credentials: credentials
